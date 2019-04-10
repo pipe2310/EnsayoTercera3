@@ -272,8 +272,8 @@ app.post('/registro',(req,res)=>{
 	});
 });
 
-app.post('/ingresar',(req,res)=>{
-	res.render('ingresar',{
+app.post('/usuario',(req,res)=>{
+	res.render('usuario',{
 
 	});
 });
@@ -289,7 +289,7 @@ app.post('/ingresar2',(req,res)=>{
 					})
 		}
 		if(!bcrypt.compareSync(req.body.password,resultados.password)){
-			return	res.render('ingresar',{
+			return	res.render('usuario',{
 				mensaje: "Contraseña no es correcta"
 			})
 		}
