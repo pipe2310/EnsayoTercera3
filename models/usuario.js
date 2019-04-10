@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 mongoose.set('useCreateIndex', true);
+
 const usuarioSchema = new Schema({
 	identificador:{
 		type: Number,
@@ -27,7 +28,6 @@ const usuarioSchema = new Schema({
 		type: String
 	}
 });
-
 
 const Usuario = mongoose.model('Usuario', usuarioSchema);
 

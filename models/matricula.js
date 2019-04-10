@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-
 const Schema = mongoose.Schema;
 mongoose.set('useCreateIndex', true);
+
 const matriculaSchema = new Schema({
 	idmatricula:{
 		type:Number,
