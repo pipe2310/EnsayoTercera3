@@ -147,7 +147,7 @@ out=out+`
   <div id="collapse${i}" class="collapse" aria-labelledby="heading${i}" data-parent="#accordionExample">
 <div class="card-body"> 
   <table>
-  <form action="/calculos6" method="post">
+  <form action="/eliminacionmatricula" method="post">
       `
 listadoo.forEach(mat=>{
 encontradoo =listadooo.find(id=>id.identificador==mat.idaspirante)

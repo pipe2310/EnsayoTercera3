@@ -1,78 +1,40 @@
 {{>header}}
-<center><h1>Registro de cursos</h1></center>
+
+<center><h1>Registro de Aspirantes</h1></center>
 <div class="container">
-<form action="/calculos" method="post">
-  <div class="form-group">
-    <label for="id">Identificador Del Curso:</label>
-    <input type="number" class="form-control" name="id" required="required" placeholder="Ingrese el identificador del curso">
-  </div>
-  <div class="form-group">
-    <label for="nombre">Nombre:</label>
-    <input type="text" class="form-control" name="nombre" required="required" placeholder="Ingrese el nombre del curso">
-  </div>
-   <div class="form-group">
-    <label for="descripcion">Descripcion:</label>
-    <!---<input type="text" class="form-control" name="descripcion" required="required" placeholder="Ingrese una breve descripcion del curso">--->
-    <textarea type="text" name="descripcion"  class="form-control" required="required" placeholder="Ingrese una breve descripcion del curso"></textarea>
-  </div>
-   <div class="form-group">
-    <label for="pwd">Valor:</label>
-    <input type="number" class="form-control" name="valor" required="required" placeholder="Ingrese el valor del curso">
-  </div>
+  <form class="form-horizontal" action="/registroaspirante" method="post">
     <div class="form-group">
-    <label for="modalidad">Modalidad:</label>
-   <!--- <input type="text" class="form-control" name="modalidad" placeholder="Ingrese la modalidad del curso">--->
-    <select name="modalidad" class="form-control" >  
-    <option value="">-</option> 
-   <option value="Virtual">Virtual</option> 
-   <option value="Presencial">Presencial</option> 
-</select>
-  </div>
-    <div class="form-group">
-    <label for="intensidad">Intensidad Horaria:</label>
-    <input type="number" class="form-control" name="intensidad" placeholder="Ingrese la intensidad horaria del curso">
-  </div>
-
-
-  <center><button type="submit" class="btn btn-default">Guardar</button></center>
-
-</form>
-</div>	
-<h1>Ver Cursos Como Administrador</h1>
-<br>
-<table class="table table-striped">
-<tr>
-
-{{{mostrarr listado}}}
+      <label class="control-label col-sm-2" for="id">Documento de identidad:</label>
+      <div class="col-sm-10">
+        <input type="number" class="form-control" placeholder="Ingrese su documento de identidad" name="id" required="required">
+      </div>
+    </div>
+       <div class="form-group">
+      <label class="control-label col-sm-2" for="id">Nombre:</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" placeholder="Ingrese su nombre" name="nombre" required="required">
+      </div>
+    </div>
+        <div class="form-group">
+      <label class="control-label col-sm-2" for="id">Correo:</label>
+      <div class="col-sm-10">
+        <input type="email" class="form-control" placeholder="Ingrese su correo electronico" name="correo" required="required">
+      </div>
+    </div>
+        <div class="form-group">
+      <label class="control-label col-sm-2" for="id">Telefono:</label>
+      <div class="col-sm-10">
+        <input type="number" class="form-control" placeholder="Ingrese su numero de telefono" name="telefono" required="required">
+      </div>
+    </div>
+    <div class="form-group">        
+      <div class="col-sm-offset-2 col-sm-10">
+       <center> <button type="submit" class="btn btn-default">Guardar</button></center>
+      </div>
+    </div>
+  </form>
+</div>
 
 </table>
-<center><h1>Actualizacion estado del curso</h1></center>
-
-<div class="container">
-  <form action="/calculos4" method="post">
-    <div class="form-group">
-      <label for="id">Curso</label>
-      <select name="id" class="form-control" > 
-         {{mostrarcursosnombre listado}}
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="estado">Estado:</label>
-      <select name="estado" class="form-control" >  
-        <option value="Cerrado">Cerrado</option> 
-        <option value="Disponible">Disponible</option> 
-      </select>
-    </div>
-    <center><button type="submit" class="btn btn-default">Actualizar</button></center>
-  </form>
-</div>	
-
-<br>
-<center><h1>Estudiantes Matriculados</h1></center>
-
-
-{{{mostrarmatcursos2 listado listadoo listadooo}}}
-
-
 
 {{>footer}}

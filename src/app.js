@@ -70,7 +70,7 @@ app.get('/',(req,res)=>{
 
 });
 
-app.get('/aspirante',(req,res)=>{
+app.get('/coordinador',(req,res)=>{
 
 	Curso.find({}).exec((err,respuesta)=>{//entre las llaves condicion ejemplo ingles: 5
 		if(err){
@@ -84,7 +84,7 @@ app.get('/aspirante',(req,res)=>{
 				if(err){
 					return console.log(err)
 				}
-				res.render('aspirante',{
+				res.render('coordinador',{
 					listado:respuesta,
 					listadoo: respuestaa,
 					listadooo:respuestaaa
@@ -115,8 +115,8 @@ app.get('/ensayo',(req,res)=>{
 	});
 });
 
-app.get('/usuario',(req,res)=>{
-	res.render('usuario',{
+app.get('/aspirante',(req,res)=>{
+	res.render('aspirante',{
 		
 	});
 });
@@ -127,7 +127,7 @@ app.get('/actualizarcurso',(req,res)=>{
 	});
 });
 
-app.post('/calculos',(req,res)=>{
+app.post('/registrocursos',(req,res)=>{
 
 	let curso= new Curso({
 		identificador: parseInt(req.body.id),
@@ -141,7 +141,7 @@ app.post('/calculos',(req,res)=>{
 
 	curso.save((err,resultado)=>{
 		if(err){
-			res.render('calculos',{
+			res.render('registrocursos',{
 			mostrarcurso: err
 			})
 		}
@@ -149,7 +149,7 @@ app.post('/calculos',(req,res)=>{
 			if(err){
 				return console.log(err)
 			}
-			res.render('calculos',{
+			res.render('registrocursos',{
 				mostrarcurso: "Se ha guardado correctamente el curso  "+ resultado.nombre ,//or resultado.nombre etc
 				listado: respuesta
 			})
@@ -158,7 +158,7 @@ app.post('/calculos',(req,res)=>{
 
 });
 
-app.post('/calculos2',(req,res)=>{
+app.post('/registroaspirante',(req,res)=>{
 
 		let aspirante= new Aspirante({
 		identificador: parseInt(req.body.id),
@@ -169,18 +169,18 @@ app.post('/calculos2',(req,res)=>{
 
 		aspirante.save((err,resultado)=>{
 			if(err){
-				res.render('calculos2',{
+				res.render('registroaspirante',{
 				mostraraspirante: err
 				})
 			}
-			res.render('calculos2',{
+			res.render('registroaspirante',{
 				mostraraspirante: resultado//or resultado.nombre etc
 			})
 		})
 
 });
 
-app.post('/calculos3',(req,res)=>{
+app.post('/registromatricula',(req,res)=>{
 var sw=false;
 let documento=req.body.documento;
 
@@ -189,7 +189,7 @@ let documento=req.body.documento;
 			return console.log(err)
 		}
 		if(!respuesta){
-			res.render('calculos3',{
+			res.render('registromatricula',{
 				mostrarmatricula: "El documento de identidad ingresado no se encuentra registrado"//or resultado.nombre etc
 			})
 		}	
@@ -202,21 +202,21 @@ let documento=req.body.documento;
 				})
 				matricula.save((err,resultado)=>{
 					if(err){
-						res.render('calculos3',{
+						res.render('registromatricula',{
 						mostrarmatricula: "Ya se ha matriculado previamente a este curso"
 						})
 					}
 					if(!resultado){
 					}
 					else{
-						res.render('calculos3',{
+						res.render('registromatricula',{
 						mostrarmatricula: "Se ha matriculado correctamente al curso "+resultado.idcurso//or resultado.nombre etc
 						})
 					}
 				})
 			}
 			else{
-				res.render('calculos3',{
+				res.render('registromatricula',{
 					mostrarmatricula: "no se encontro"//or resultado.nombre etc
 				})
 			}
@@ -226,7 +226,7 @@ let documento=req.body.documento;
 
 });
 
-app.post('/calculos4',(req,res)=>{
+app.post('/actualizacionestado',(req,res)=>{
 
 	Curso.findOneAndUpdate({identificador:req.body.id},{$set: {estado:req.body.estado}},{new: true},(err,resultados)=>{
 		if(err){
@@ -235,22 +235,14 @@ app.post('/calculos4',(req,res)=>{
 		/*if(!usuario){
 			return res.redirect('/')
 		}*/
-		res.render('calculos4',{
+		res.render('actualizacionestado',{
 			mostraractualizar:	"Estado del curso "+resultados.nombre+" actualizado correctamente"
 		});
 	})
 
 });
 
-app.post('/calculos5',(req,res)=>{
-
-	res.render('calculos5',{
-		id: parseInt(req.body.id)
-	});
-
-});
-
-app.post('/calculos6',(req,res)=>{
+app.post('/eliminacionmatricula',(req,res)=>{
 
 	Matricula.findOneAndDelete({idmatricula:req.body.matricula},req.body,(err,resultados)=>{
 		if(err){
@@ -259,7 +251,7 @@ app.post('/calculos6',(req,res)=>{
 		Matricula.find({idcurso: req.body.identificadorcurso},(err,respuesta)=>{
 			Aspirante.find({}).exec((err,respuestaa)=>{
 		  		Curso.find({}).exec((err,respuestaaa)=>{
-					res.render('calculos6',{
+					res.render('eliminacionmatricula',{
 						matricula: resultados,
 						matriculaa: respuesta,
 						listado: respuestaaa,
@@ -271,16 +263,6 @@ app.post('/calculos6',(req,res)=>{
 			})
 	  	})
 	})
-
-});
-
-app.post('/calculos7',(req,res)=>{
-
-	res.render('calculos7',{
-		id: parseInt(req.body.id),
-		cedula: parseInt(req.body.cedula),
-		nombre: req.body.nombre
-	});
 
 });
 
