@@ -121,6 +121,12 @@ app.get('/aspirante',(req,res)=>{
 	});
 });
 
+app.get('/usuario',(req,res)=>{
+	res.render('usuario',{
+		
+	});
+});
+
 app.get('/actualizarcurso',(req,res)=>{
 	res.render('actualizarcurso',{
 		
@@ -266,14 +272,14 @@ app.post('/eliminacionmatricula',(req,res)=>{
 
 });
 
-app.post('/registro',(req,res)=>{
-	res.render('registro',{
+app.post('/usuario',(req,res)=>{
+	res.render('usuario',{
 
 	});
 });
 
-app.post('/usuario',(req,res)=>{
-	res.render('usuario',{
+app.post('/iniciodesesion',(req,res)=>{
+	res.render('iniciodesesion',{
 
 	});
 });
@@ -289,7 +295,7 @@ app.post('/ingresar2',(req,res)=>{
 					})
 		}
 		if(!bcrypt.compareSync(req.body.password,resultados.password)){
-			return	res.render('usuario',{
+			return	res.render('iniciodesesion',{
 				mensaje: "Contraseña no es correcta"
 			})
 		}
@@ -314,7 +320,7 @@ app.get('*',(req,res)=>{
 	})
 })
 
-app.post('/registro2',(req,res)=>{
+app.post('/registrousuario',(req,res)=>{
 	let usuario= new Usuario({
 		identificador: parseInt(req.body.id),
 		nombre: req.body.nombre,
@@ -325,11 +331,11 @@ app.post('/registro2',(req,res)=>{
 	})
 	usuario.save((err,resultado)=>{
 		if(err){
-			res.render('registro2',{
+			res.render('registrousuario',{
 			mostrarusuario: err
 			})
 		}
-		res.render('registro2',{
+		res.render('registrousuario',{
 			mostrarusuario: resultado//or resultado.nombre etc
 		})
 	})
