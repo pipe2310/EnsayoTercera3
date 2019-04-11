@@ -50,20 +50,28 @@ app.use(session({
 app.use((req,res,next)=>{
   if(req.session.usuario){
   	res.locals.sesion = true
-  	res.locals.nombre = req.session.nombre
+  	res.locals.nombre = req.session.nombre.toUpperCase();
+  	//res.locals.tipo = req.session.tipo
   }
+  if(req.session.tipo=="Coordinador"){
+  	res.locals.coordinador = true
+  }
+  if(req.session.tipo=="Aspirante"){
+  	res.locals.aspirante = true
+  }
+  
 next()
 })
 
 app.set('view engine','hbs');
 
-app.get('/',(req,res)=>{
+app.get('/interesado',(req,res)=>{
 
 	Curso.find({}).exec((err,respuesta)=>{//entre las llaves condicion ejemplo ingles: 5
 		if(err){
 			return console.log(err)
 		}
-		res.render('index',{
+		res.render('interesado',{
 			listado:respuesta
 		});
 	})
@@ -115,8 +123,44 @@ app.get('/ensayo',(req,res)=>{
 	});
 });
 
+app.get('/cursos',(req,res)=>{
+	res.render('cursos',{
+		
+	});
+});
+
+app.get('/inscripciones',(req,res)=>{
+	Curso.find({}).exec((err,respuesta)=>{//entre las llaves condicion ejemplo ingles: 5
+		if(err){
+			return console.log(err)
+		}
+		Matricula.find({}).exec((err,respuestaa)=>{//entre las llaves condicion ejemplo ingles: 5
+			if(err){
+				return console.log(err)
+			}
+			Aspirante.find({}).exec((err,respuestaaa)=>{//entre las llaves condicion ejemplo ingles: 5
+				if(err){
+					return console.log(err)
+				}
+				res.render('inscripciones',{
+					listado:respuesta,
+					listadoo: respuestaa,
+					listadooo:respuestaaa
+				});
+
+			})
+		})
+	})
+});
+
 app.get('/aspirante',(req,res)=>{
 	res.render('aspirante',{
+		
+	});
+});
+
+app.get('/',(req,res)=>{
+	res.render('index',{
 		
 	});
 });
@@ -285,6 +329,8 @@ app.post('/iniciodesesion',(req,res)=>{
 });
 
 app.post('/ingresar2',(req,res)=>{
+let sw=false;
+let sww=false;
 	Usuario.findOne({identificador:parseInt(req.body.identificador)},(err,resultados)=>{
 		if(err){
 			return console.log(err)
@@ -304,10 +350,18 @@ app.post('/ingresar2',(req,res)=>{
 		req.session.nombre = resultados.nombre
 		req.session.tipo = resultados.tipo
 
+		if(resultados.tipo=='Coordinador')
+			sw=true;
+
+		if(resultados.tipo=='Aspirante')
+			sww=true;
+		
 		res.render('ingresar2',{
-			mensaje: "Bienvenido"+ resultados.nombre, 
+			mensaje: "Bienvenido "+ resultados.nombre.toUpperCase(), 
 			sesion: true,
-			nombre: req.session.nombre,
+			coordinador: sw,
+			aspirante: sww,
+			nombre: req.session.nombre.toUpperCase(),
 			mensajee:req.session.usuario,
 			mensajeee:req.session.tipo
 		})
@@ -332,12 +386,19 @@ app.post('/registrousuario',(req,res)=>{
 	usuario.save((err,resultado)=>{
 		if(err){
 			res.render('registrousuario',{
-			mostrarusuario: err
+			mostrarusuario: 'El numero de cedula ingresado ya existe'
 			})
 		}
+		if(!resultado){
+			res.render('registrousuario',{
+			mostrarusuario: 'El numero de cedula ingresado ya existe'
+			})
+					}
+					else{
 		res.render('registrousuario',{
-			mostrarusuario: resultado//or resultado.nombre etc
+			mostrarusuario:'El documento de identidad '+ resultado.identificador +' se ha registrado correctamente'//or resultado.nombre etc
 		})
+}
 	})
 
 });
