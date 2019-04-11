@@ -3,7 +3,8 @@ const fs = require ('fs');
 const Curso = require ('../models/curso')
 const Aspirante = require ('../models/aspirante')
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////MOSTRAR LISTADO DE CURSOS//////////////////////////////////////////////////////////
+
 hbs.registerHelper('mostrarr',(listado)=>{
 let texto=`
 <table class='table table-striped table-hover'>
@@ -17,36 +18,40 @@ let texto=`
       <th>Estado</th>
     </thead>
   <tbody>`;
+
 if(listado){
-listado.forEach(curso=>{
+  listado.forEach(curso=>{
       if(curso.intensidad==null){
         intensidad="";
-      } else{
+      }else{
         intensidad=curso.intensidad;
       }
-	texto=texto+
-  	`<tr>
-  		<td>${curso.identificador}</td>
-  		<td>${curso.nombre}</td>
-  		<td>${curso.descripcion}</td>
-  		<td>${curso.valor}</td>
-  		<td>${curso.modalidad}</td>
-  		<td>${intensidad}</td>
-  		<td>${curso.estado}</td>
-  	</tr>`;
-})
+	     texto=texto+
+  	   `<tr>
+    		<td>${curso.identificador}</td>
+    		<td>${curso.nombre}</td>
+    		<td>${curso.descripcion}</td>
+    		<td>${curso.valor}</td>
+    		<td>${curso.modalidad}</td>
+    		<td>${intensidad}</td>
+    		<td>${curso.estado}</td>
+    	</tr>`;
+  })
 }
 texto=texto+`
   </tbody>  
 </table>`;
+
 return texto;
+
 })
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////MOSTRAR NOMBRE DE LOS CURSOS//////////////////////////////////////////////////////////////
+///////////////////////////////////////////MOSTRAR NOMBRE DE LOS CURSOS////////////////////////////////////////////////////////////////
+
 hbs.registerHelper('mostrarcursosnombre',(listado)=>{
-let string ;
+
 let out='<option value="">-</option> ';
 
   listado.forEach(curso=>{
@@ -58,11 +63,13 @@ let out='<option value="">-</option> ';
   );
 
 })
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////MOSTRAR NOMBRE DE LOS CURSOS DISPONIBLES//////////////////////////////////////////////////////////////
+///////////////////////////////////////////MOSTRAR NOMBRE DE LOS CURSOS DISPONIBLES////////////////////////////////////////////////////
+
 hbs.registerHelper('mostrarcursosnombre2',(listado)=>{
-let string ;
+
 let out='<option value="">-</option> ';
 
   listado.forEach(curso=>{
@@ -78,26 +85,22 @@ let out='<option value="">-</option> ';
 })
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////MOSTRAR LOS CURSOS DISPONIBLES VER MAS2//////////////////////////////////////////////////////////////
+///////////////////////////////////////////MOSTRAR LOS CURSOS DISPONIBLES VER MAS2/////////////////////////////////////////////////////
+
 hbs.registerHelper('mostrarcursosdisponiblesvermas2',(listado)=>{
-  let intensidad;
-let string ;
-var out=`<div class="accordion" id="accordionExample">
+let intensidad;
+var out=`
+<div class="accordion" id="accordionExample">
  <div class="row">`;
-var no='No se encontro un curso con el identificador ingresado';
-var sw=false;
 i=1;
-	listado.forEach(curso=>{
+listado.forEach(curso=>{
     if(curso.estado=='Disponible' ){
       if(curso.intensidad==null){
         intensidad="";
       } else{
         intensidad=curso.intensidad+' Horas';
       }
-        out = out +
-      
-      
-    `
+        out = out +`
     <div class=".cols-sm-12 .cols-md-4 .cols-lg-12" >
       <div class="card" >
         <div class="card-header" id="heading${i}" >
@@ -122,23 +125,27 @@ i=1;
     </div>`
     }
     i=i+1;
-  })
+})
 
 out=out+`
   </div> 
 </div>`;
+
   return new hbs.SafeString(
     out 
   );
 
 })
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////MOSTRAR LAS MATRICULAS//////////////////////////////////////////////////////////////
+///////////////////////////////////////////MOSTRAR LAS MATRICULAS//////////////////////////////////////////////////////////////////////
+
 hbs.registerHelper('mostrarmatcursos2',(listado,listadoo,listadooo)=>{
-let string ;
-var out = `<div class="accordion" id="accordionExample"> 
-<div class="row">`;
+
+var out = `
+<div class="accordion" id="accordionExample"> 
+  <div class="row">`;
 i=1;
 let sw;
 
@@ -193,13 +200,13 @@ encontradoo =listadooo.find(id=>id.identificador==mat.idaspirante)
 out=out+ `
   </table>
   </form>
-</div>
-</div>
-</div>
-</div>
+          </div>
+        </div>
+      </div>
+    </div>
    		`
 i=i+1;
-	})
+})
 
 	out=out+  `
    </div>
@@ -210,8 +217,11 @@ i=i+1;
   );
 
 })
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////MOSTRAR LAS MATRICULAS//////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////MOSTRAR LAS MATRICULAS//////////////////////////////////////////////////////////////////////
+
 hbs.registerHelper('mostrarmatcursos3',(matriculaa,listado,listadoo,identificador,documento)=>{
 let string ;
 var out = '<div class="accordion" id="accordionExample"> <div class="row">';
@@ -280,4 +290,5 @@ i=i+1;
   );
 
 })
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

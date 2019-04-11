@@ -6,7 +6,6 @@ const bodyParser = require('body-parser')
 require('./helpers');
 const mongoose = require('mongoose');
 const Curso = require ('../models/curso')
-const Aspirante = require ('../models/aspirante')
 const Matricula = require ('../models/matricula')
 const Usuario = require ('../models/usuario')
 const bcrypt = require('bcrypt');
@@ -66,6 +65,12 @@ next()
 
 app.set('view engine','hbs');
 
+app.get('/',(req,res)=>{
+	res.render('index',{
+		
+	});
+});
+
 app.get('/interesado',(req,res)=>{
 
 	Curso.find({}).exec((err,respuesta)=>{//entre las llaves condicion ejemplo ingles: 5
@@ -77,268 +82,6 @@ app.get('/interesado',(req,res)=>{
 		});
 	})
 
-});
-
-app.get('/coordinador',(req,res)=>{
-
-	Curso.find({}).exec((err,respuesta)=>{//entre las llaves condicion ejemplo ingles: 5
-		if(err){
-			return console.log(err)
-		}
-		Matricula.find({}).exec((err,respuestaa)=>{//entre las llaves condicion ejemplo ingles: 5
-			if(err){
-				return console.log(err)
-			}
-			Usuario.find({}).exec((err,respuestaaa)=>{//entre las llaves condicion ejemplo ingles: 5
-				if(err){
-					return console.log(err)
-				}
-				res.render('coordinador',{
-					listado:respuesta,
-					listadoo: respuestaa,
-					listadooo:respuestaaa
-				});
-
-			})
-		})
-	})
-
-});
-
-app.get('/matricula',(req,res)=>{
-
-	Curso.find({}).exec((err,respuesta)=>{//entre las llaves condicion ejemplo ingles: 5
-		if(err){
-			return console.log(err)
-		}
-		res.render('matricula',{
-			listado:respuesta
-		});
-	})
-
-});
-
-app.get('/ensayo',(req,res)=>{
-	res.render('ensayo',{
-		
-	});
-});
-
-app.get('/cursos',(req,res)=>{
-	res.render('cursos',{
-		
-	});
-});
-
-app.get('/inscripciones',(req,res)=>{
-	Curso.find({}).exec((err,respuesta)=>{//entre las llaves condicion ejemplo ingles: 5
-		if(err){
-			return console.log(err)
-		}
-		Matricula.find({}).exec((err,respuestaa)=>{//entre las llaves condicion ejemplo ingles: 5
-			if(err){
-				return console.log(err)
-			}
-			Usuario.find({}).exec((err,respuestaaa)=>{//entre las llaves condicion ejemplo ingles: 5
-				if(err){
-					return console.log(err)
-				}
-				res.render('inscripciones',{
-					listado:respuesta,
-					listadoo: respuestaa,
-					listadooo:respuestaaa
-				});
-
-			})
-		})
-	})
-});
-
-app.get('/aspirante',(req,res)=>{
-	res.render('aspirante',{
-		
-	});
-});
-
-app.get('/',(req,res)=>{
-	res.render('index',{
-		
-	});
-});
-
-app.get('/usuario',(req,res)=>{
-	res.render('usuario',{
-		
-	});
-});
-
-app.get('/actualizarcurso',(req,res)=>{
-	res.render('actualizarcurso',{
-		
-	});
-});
-
-app.post('/registrocursos',(req,res)=>{
-let lista;
-	let curso= new Curso({
-		identificador: parseInt(req.body.id),
-		nombre: req.body.nombre,
-		descripcion: req.body.descripcion,
-		valor: parseInt(req.body.valor),
-		modalidad: req.body.modalidad,
-		intensidad: req.body.intensidad,
-		estado: 'Disponible'
-	})
-		Curso.find({}).exec((err,respuesta)=>{//entre las llaves condicion ejemplo ingles: 5
-			if(err){
-				return console.log(err)
-			}
-			if(respuesta){
-				lista=respuesta;	
-			}
-		})
-	curso.save((err,resultado)=>{
-		if(err){
-			res.render('registrocursos',{
-			mostrarcurso: "El identificador del curso ingresado se ha registrado previamente",
-			listado:lista
-			})
-		}
-		Curso.find({}).exec((err,respuesta)=>{//entre las llaves condicion ejemplo ingles: 5
-			if(err){
-				return console.log(err)
-			}
-			if(resultado){
-				res.render('registrocursos',{
-					mostrarcurso: "Se ha guardado correctamente el curso  "+ resultado.nombre ,//or resultado.nombre etc
-					listado: respuesta
-				})		
-			}
-		})
-	})
-
-});
-
-app.post('/registroaspirante',(req,res)=>{
-
-		let aspirante= new Aspirante({
-		identificador: parseInt(req.body.id),
-		nombre: req.body.nombre,
-		correo: req.body.correo,
-		telefono: parseInt(req.body.telefono),
-		})
-
-		aspirante.save((err,resultado)=>{
-			if(err){
-				res.render('registroaspirante',{
-				mostraraspirante: err
-				})
-			}
-			res.render('registroaspirante',{
-				mostraraspirante: resultado//or resultado.nombre etc
-			})
-		})
-
-});
-
-app.post('/registromatricula',(req,res)=>{
-var sw=false;
-let documento=req.body.documento;
-
-	Usuario.findOne({identificador: documento},(err,respuesta)=>{
-		if(err){
-			return console.log(err)
-		}
-		if(!respuesta){
-			res.render('registromatricula',{
-				mostrarmatricula: "El documento de identidad ingresado no se encuentra registrado"//or resultado.nombre etc
-			})
-		}	
-		else{
-			if(respuesta.identificador==parseInt(req.body.documento)){
-				let matricula= new Matricula({
-				idmatricula:parseInt(req.body.identificador)+''+parseInt(req.body.documento),
-				idcurso: parseInt(req.body.identificador),
-				idaspirante: parseInt(req.body.documento),
-				})
-				matricula.save((err,resultado)=>{
-					if(err){
-						res.render('registromatricula',{
-						mostrarmatricula: "Ya se ha matriculado previamente a este curso"
-						})
-					}
-					if(!resultado){
-					}
-					else{
-				Curso.findOne({identificador: parseInt(resultado.idcurso)},(err,respuesta)=>{//entre las llaves condicion ejemplo ingles: 5
-					if(err){
-						return console.log(err)
-					}
-					
-
-		
-						res.render('registromatricula',{
-						mostrarmatricula: "Se ha matriculado correctamente al curso "+respuesta.nombre+' el cual tiene un valor de '+respuesta.valor+' COP' //or resultado.nombre etc
-						})
-						})
-					}
-				})
-			}
-			else{
-				res.render('registromatricula',{
-					mostrarmatricula: "no se encontro"//or resultado.nombre etc
-				})
-			}
-		}
-
-	})
-
-});
-
-app.post('/actualizacionestado',(req,res)=>{
-
-	Curso.findOneAndUpdate({identificador:req.body.id},{$set: {estado:req.body.estado}},{new: true},(err,resultados)=>{
-		if(err){
-			return console.log(err)
-		}
-		/*if(!usuario){
-			return res.redirect('/')
-		}*/
-		res.render('actualizacionestado',{
-			mostraractualizar:	"Estado del curso "+resultados.nombre+" actualizado correctamente"
-		});
-	})
-
-});
-
-app.post('/eliminacionmatricula',(req,res)=>{
-
-	Matricula.findOneAndDelete({idmatricula:req.body.matricula},req.body,(err,resultados)=>{
-		if(err){
-			return console.log(err)
-		}
-		Matricula.find({idcurso: req.body.identificadorcurso},(err,respuesta)=>{
-			Usuario.find({}).exec((err,respuestaa)=>{
-		  		Curso.find({}).exec((err,respuestaaa)=>{
-					res.render('eliminacionmatricula',{
-						matricula: "Inscripción eliminada correctamente",
-						matriculaa: respuesta,
-						listado: respuestaaa,
-						listadoo:respuestaa,
-						identificador:req.body.identificadorcurso,
-						documento:req.body.identificador
-					})
-		 	 	})
-			})
-	  	})
-	})
-
-});
-
-app.post('/usuario',(req,res)=>{
-	res.render('usuario',{
-
-	});
 });
 
 app.post('/iniciodesesion',(req,res)=>{
@@ -394,11 +137,17 @@ let sww=false;
 	})
 });
 
-app.get('*',(req,res)=>{
-	res.render('error',{
-		estudiante: 'error'
-	})
-})
+app.post('/usuario',(req,res)=>{
+	res.render('usuario',{
+
+	});
+});
+
+app.get('/usuario',(req,res)=>{
+	res.render('usuario',{
+		
+	});
+});
 
 app.post('/registrousuario',(req,res)=>{
 	let usuario= new Usuario({
@@ -428,6 +177,213 @@ app.post('/registrousuario',(req,res)=>{
 	})
 
 });
+
+app.get('/cursos',(req,res)=>{
+	res.render('cursos',{
+		
+	});
+});
+
+app.post('/registrocursos',(req,res)=>{
+let lista;
+	let curso= new Curso({
+		identificador: parseInt(req.body.id),
+		nombre: req.body.nombre,
+		descripcion: req.body.descripcion,
+		valor: parseInt(req.body.valor),
+		modalidad: req.body.modalidad,
+		intensidad: req.body.intensidad,
+		estado: 'Disponible'
+	})
+		Curso.find({}).exec((err,respuesta)=>{//entre las llaves condicion ejemplo ingles: 5
+			if(err){
+				return console.log(err)
+			}
+			if(respuesta){
+				lista=respuesta;	
+			}
+		})
+	curso.save((err,resultado)=>{
+		if(err){
+			res.render('registrocursos',{
+			mostrarcurso: "El identificador del curso ingresado se ha registrado previamente",
+			listado:lista
+			})
+		}
+		Curso.find({}).exec((err,respuesta)=>{//entre las llaves condicion ejemplo ingles: 5
+			if(err){
+				return console.log(err)
+			}
+			if(resultado){
+				res.render('registrocursos',{
+					mostrarcurso: "Se ha guardado correctamente el curso  "+ resultado.nombre ,//or resultado.nombre etc
+					listado: respuesta
+				})		
+			}
+		})
+	})
+
+});
+
+app.get('/inscripciones',(req,res)=>{
+	Curso.find({}).exec((err,respuesta)=>{//entre las llaves condicion ejemplo ingles: 5
+		if(err){
+			return console.log(err)
+		}
+		Matricula.find({}).exec((err,respuestaa)=>{//entre las llaves condicion ejemplo ingles: 5
+			if(err){
+				return console.log(err)
+			}
+			Usuario.find({}).exec((err,respuestaaa)=>{//entre las llaves condicion ejemplo ingles: 5
+				if(err){
+					return console.log(err)
+				}
+				res.render('inscripciones',{
+					listado:respuesta,
+					listadoo: respuestaa,
+					listadooo:respuestaaa
+				});
+
+			})
+		})
+	})
+});
+
+app.post('/eliminacionmatricula',(req,res)=>{
+
+	Matricula.findOneAndDelete({idmatricula:req.body.matricula},req.body,(err,resultados)=>{
+		if(err){
+			return console.log(err)
+		}
+		Matricula.find({idcurso: req.body.identificadorcurso},(err,respuesta)=>{
+			Usuario.find({}).exec((err,respuestaa)=>{
+		  		Curso.find({}).exec((err,respuestaaa)=>{
+					res.render('eliminacionmatricula',{
+						matricula: "Inscripción eliminada correctamente",
+						matriculaa: respuesta,
+						listado: respuestaaa,
+						listadoo:respuestaa,
+						identificador:req.body.identificadorcurso,
+						documento:req.body.identificador
+					})
+		 	 	})
+			})
+	  	})
+	})
+
+});
+
+app.get('/coordinador',(req,res)=>{
+
+	Curso.find({}).exec((err,respuesta)=>{//entre las llaves condicion ejemplo ingles: 5
+		if(err){
+			return console.log(err)
+		}
+		Matricula.find({}).exec((err,respuestaa)=>{//entre las llaves condicion ejemplo ingles: 5
+			if(err){
+				return console.log(err)
+			}
+			Usuario.find({}).exec((err,respuestaaa)=>{//entre las llaves condicion ejemplo ingles: 5
+				if(err){
+					return console.log(err)
+				}
+				res.render('coordinador',{
+					listado:respuesta,
+					listadoo: respuestaa,
+					listadooo:respuestaaa
+				});
+
+			})
+		})
+	})
+
+});
+
+app.post('/actualizacionestado',(req,res)=>{
+
+	Curso.findOneAndUpdate({identificador:req.body.id},{$set: {estado:req.body.estado}},{new: true},(err,resultados)=>{
+		if(err){
+			return console.log(err)
+		}
+		/*if(!usuario){
+			return res.redirect('/')
+		}*/
+		res.render('actualizacionestado',{
+			mostraractualizar:	"Estado del curso "+resultados.nombre+" actualizado correctamente"
+		});
+	})
+
+});
+
+app.get('/matricula',(req,res)=>{
+
+	Curso.find({}).exec((err,respuesta)=>{//entre las llaves condicion ejemplo ingles: 5
+		if(err){
+			return console.log(err)
+		}
+		res.render('matricula',{
+			listado:respuesta
+		});
+	})
+
+});
+
+app.post('/registromatricula',(req,res)=>{
+var sw=false;
+let documento=req.body.documento;
+
+	Usuario.findOne({identificador: documento},(err,respuesta)=>{
+		if(err){
+			return console.log(err)
+		}
+		if(!respuesta){
+			res.render('registromatricula',{
+				mostrarmatricula: "El documento de identidad ingresado no se encuentra registrado"//or resultado.nombre etc
+			})
+		}	
+		else{
+			if(respuesta.identificador==parseInt(req.body.documento)){
+				let matricula= new Matricula({
+				idmatricula:parseInt(req.body.identificador)+''+parseInt(req.body.documento),
+				idcurso: parseInt(req.body.identificador),
+				idaspirante: parseInt(req.body.documento),
+				})
+				matricula.save((err,resultado)=>{
+					if(err){
+						res.render('registromatricula',{
+						mostrarmatricula: "Ya se ha matriculado previamente a este curso"
+						})
+					}
+					if(!resultado){
+					}
+					else{
+				Curso.findOne({identificador: parseInt(resultado.idcurso)},(err,respuesta)=>{//entre las llaves condicion ejemplo ingles: 5
+					if(err){
+						return console.log(err)
+					}
+						res.render('registromatricula',{
+						mostrarmatricula: "Se ha matriculado correctamente al curso "+respuesta.nombre+' el cual tiene un valor de '+respuesta.valor+' COP' //or resultado.nombre etc
+						})
+						})
+					}
+				})
+			}
+			else{
+				res.render('registromatricula',{
+					mostrarmatricula: "no se encontro"//or resultado.nombre etc
+				})
+			}
+		}
+
+	})
+
+});
+
+app.get('*',(req,res)=>{
+	res.render('error',{
+		estudiante: 'error'
+	})
+})
 
 app.post('/salir',(req,res)=>{
 
