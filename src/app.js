@@ -321,7 +321,7 @@ app.post('/eliminacionmatricula',(req,res)=>{
 			Usuario.find({}).exec((err,respuestaa)=>{
 		  		Curso.find({}).exec((err,respuestaaa)=>{
 					res.render('eliminacionmatricula',{
-						matricula: "Inscripcion eliminada correctamente",
+						matricula: "Inscripción eliminada correctamente",
 						matriculaa: respuesta,
 						listado: respuestaaa,
 						listadoo:respuestaa,
