@@ -51,6 +51,7 @@ app.use((req,res,next)=>{
   if(req.session.usuario){
   	res.locals.sesion = true
   	res.locals.nombre = req.session.nombre.toUpperCase();
+  	res.locals.identificador = req.session.identificador
   	//res.locals.tipo = req.session.tipo
   }
   if(req.session.tipo=="Coordinador"){
@@ -178,7 +179,7 @@ app.get('/actualizarcurso',(req,res)=>{
 });
 
 app.post('/registrocursos',(req,res)=>{
-
+let lista;
 	let curso= new Curso({
 		identificador: parseInt(req.body.id),
 		nombre: req.body.nombre,
@@ -188,11 +189,19 @@ app.post('/registrocursos',(req,res)=>{
 		intensidad: req.body.intensidad,
 		estado: 'Disponible'
 	})
-
+		Curso.find({}).exec((err,respuesta)=>{//entre las llaves condicion ejemplo ingles: 5
+			if(err){
+				return console.log(err)
+			}
+			if(respuesta){
+				lista=respuesta;	
+			}
+		})
 	curso.save((err,resultado)=>{
 		if(err){
 			res.render('registrocursos',{
-			mostrarcurso: err
+			mostrarcurso: "Identificador del curso registrado previamente",
+			listado:lista
 			})
 		}
 		Curso.find({}).exec((err,respuesta)=>{//entre las llaves condicion ejemplo ingles: 5
@@ -261,8 +270,16 @@ let documento=req.body.documento;
 					if(!resultado){
 					}
 					else{
+				Curso.findOne({identificador: parseInt(resultado.idcurso)},(err,respuesta)=>{//entre las llaves condicion ejemplo ingles: 5
+					if(err){
+						return console.log(err)
+					}
+					
+
+		
 						res.render('registromatricula',{
-						mostrarmatricula: "Se ha matriculado correctamente al curso "+resultado.idcurso//or resultado.nombre etc
+						mostrarmatricula: "Se ha matriculado correctamente al curso "+respuesta.nombre+' el cual tiene un valor de '+respuesta.valor//or resultado.nombre etc
+						})
 						})
 					}
 				})
@@ -304,7 +321,7 @@ app.post('/eliminacionmatricula',(req,res)=>{
 			Usuario.find({}).exec((err,respuestaa)=>{
 		  		Curso.find({}).exec((err,respuestaaa)=>{
 					res.render('eliminacionmatricula',{
-						matricula: resultados,
+						matricula: "Inscripcion eliminada correctamente",
 						matriculaa: respuesta,
 						listado: respuestaaa,
 						listadoo:respuestaa,
@@ -339,16 +356,17 @@ let sww=false;
 		}
 		if(!resultados){
 			return	res.render('ingresar2',{
-						mensaje: "Usuario no encontrado"
+						mensaje: "El usuario no es valido"
 					})
 		}
 		if(!bcrypt.compareSync(req.body.password,resultados.password)){
-			return	res.render('iniciodesesion',{
-				mensaje: "Contraseña no es correcta"
+			return	res.render('ingresar2',{
+				mensaje: "La contraseña no es valida"
 			})
 		}
 
 		req.session.usuario = resultados._id
+		req.session.identificador = resultados.identificador
 		req.session.nombre = resultados.nombre
 		req.session.tipo = resultados.tipo
 
@@ -387,7 +405,7 @@ app.post('/registrousuario',(req,res)=>{
 	})
 	usuario.save((err,resultado)=>{
 		if(err){
-			res.render('registrousuario',{
+			return res.render('registrousuario',{
 			mostrarusuario: 'El numero de cedula ingresado ya existe'
 			})
 		}
