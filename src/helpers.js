@@ -1,7 +1,7 @@
 const hbs = require('hbs');
 const fs = require ('fs');
 const Curso = require ('../models/curso')
-const Aspirante = require ('../models/aspirante')
+
 
 ////////////////////////////////////////////////////MOSTRAR LISTADO DE CURSOS//////////////////////////////////////////////////////////
 
