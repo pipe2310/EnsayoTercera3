@@ -8,12 +8,12 @@ hbs.registerHelper('mostrarr',(listado)=>{
 let texto=`
 <table class='table table-striped table-hover'>
     <thead class='thead-dark'>
-      <th>Identificador del Curso</th>
+      <th>Identificador</th>
       <th>Nombre</th>
-      <th>Descripcion</th>
+      <th>Descripción</th>
       <th>Valor</th>
       <th>Modalidad</th>
-      <th>Intensidad</th>
+      <th>Intensidad Horaria</th>
       <th>Estado</th>
     </thead>
   <tbody>`;
@@ -92,7 +92,7 @@ i=1;
       if(curso.intensidad==null){
         intensidad="";
       } else{
-        intensidad=curso.intensidad;
+        intensidad=curso.intensidad+' Horas';
       }
         out = out +
       
@@ -103,19 +103,19 @@ i=1;
         <div class="card-header" id="heading${i}" >
           <h2 class="mb-0">
             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse${i}" aria-expanded="true" aria-controls="collapse${i}">
-              Identificador del curso: ${curso.identificador}<br>
+              Identificador: ${curso.identificador}<br>
               Nombre: ${curso.nombre}<br>
               Valor: ${curso.valor}<br><br>
-              Ver Mas
+              Ver Más
             </button>
           </h2>
         </div>
 
         <div id="collapse${i}" class="collapse" aria-labelledby="heading${i}" data-parent="#accordionExample">
           <div class="card-body">
-            Descripcion: ${curso.descripcion}<br>
+            Descripción: ${curso.descripcion}<br>
             Modalidad: ${curso.modalidad}<br>
-            Intensidad: ${intensidad}
+            Intensidad Horaria: ${intensidad}
           </div>
         </div>
      </div>
@@ -150,7 +150,7 @@ out=out+`
     <div class="card-header" id="heading${i}" >
       <h2 class="mb-0">
         <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse${i}" aria-expanded="true" aria-controls="collapse${i}">
-          Identificador del curso: ${cur.identificador}<br>
+          Identificador: ${cur.identificador}<br>
           Nombre: ${cur.nombre}<br><br>
         
           Ver Matriculas
@@ -170,8 +170,9 @@ encontradoo =listadooo.find(id=>id.identificador==mat.idaspirante)
         <tr>
         	<td>Documento</td>
         	<td>Nombre</td>
-        	<td>Correo</td>
-        	<td>Telefono</td>
+        	<td>Correo Electrónico</td>
+        	<td>Teléfono</td>
+          <td>Eliminar</td>
         </tr>
       </thead>`
         sw=true;

@@ -200,7 +200,7 @@ let lista;
 	curso.save((err,resultado)=>{
 		if(err){
 			res.render('registrocursos',{
-			mostrarcurso: "Identificador del curso registrado previamente",
+			mostrarcurso: "El identificador del curso ingresado se ha registrado previamente",
 			listado:lista
 			})
 		}
@@ -278,7 +278,7 @@ let documento=req.body.documento;
 
 		
 						res.render('registromatricula',{
-						mostrarmatricula: "Se ha matriculado correctamente al curso "+respuesta.nombre+' el cual tiene un valor de '+respuesta.valor//or resultado.nombre etc
+						mostrarmatricula: "Se ha matriculado correctamente al curso "+respuesta.nombre+' el cual tiene un valor de '+respuesta.valor+' COP' //or resultado.nombre etc
 						})
 						})
 					}
@@ -347,6 +347,12 @@ app.post('/iniciodesesion',(req,res)=>{
 	});
 });
 
+app.get('/iniciodesesion',(req,res)=>{
+	res.render('iniciodesesion',{
+
+	});
+});
+
 app.post('/ingresar2',(req,res)=>{
 let sw=false;
 let sww=false;
@@ -356,12 +362,12 @@ let sww=false;
 		}
 		if(!resultados){
 			return	res.render('ingresar2',{
-						mensaje: "El usuario no es valido"
+						mensaje: "El usuario no es válido"
 					})
 		}
 		if(!bcrypt.compareSync(req.body.password,resultados.password)){
 			return	res.render('ingresar2',{
-				mensaje: "La contraseña no es valida"
+				mensaje: "La contraseña no es válida"
 			})
 		}
 
@@ -406,12 +412,12 @@ app.post('/registrousuario',(req,res)=>{
 	usuario.save((err,resultado)=>{
 		if(err){
 			return res.render('registrousuario',{
-			mostrarusuario: 'El numero de cedula ingresado ya existe'
+			mostrarusuario: 'El documento de identidad ingresado se ha registrado previamente'
 			})
 		}
 		if(!resultado){
 			res.render('registrousuario',{
-			mostrarusuario: 'El numero de cedula ingresado ya existe'
+			mostrarusuario: 'El documento de identidad ingresado se ha registrado previamente'
 			})
 					}
 					else{
