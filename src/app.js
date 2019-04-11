@@ -88,7 +88,7 @@ app.get('/coordinador',(req,res)=>{
 			if(err){
 				return console.log(err)
 			}
-			Aspirante.find({}).exec((err,respuestaaa)=>{//entre las llaves condicion ejemplo ingles: 5
+			Usuario.find({}).exec((err,respuestaaa)=>{//entre las llaves condicion ejemplo ingles: 5
 				if(err){
 					return console.log(err)
 				}
@@ -138,7 +138,7 @@ app.get('/inscripciones',(req,res)=>{
 			if(err){
 				return console.log(err)
 			}
-			Aspirante.find({}).exec((err,respuestaaa)=>{//entre las llaves condicion ejemplo ingles: 5
+			Usuario.find({}).exec((err,respuestaaa)=>{//entre las llaves condicion ejemplo ingles: 5
 				if(err){
 					return console.log(err)
 				}
@@ -199,10 +199,12 @@ app.post('/registrocursos',(req,res)=>{
 			if(err){
 				return console.log(err)
 			}
-			res.render('registrocursos',{
-				mostrarcurso: "Se ha guardado correctamente el curso  "+ resultado.nombre ,//or resultado.nombre etc
-				listado: respuesta
-			})
+			if(resultado){
+				res.render('registrocursos',{
+					mostrarcurso: "Se ha guardado correctamente el curso  "+ resultado.nombre ,//or resultado.nombre etc
+					listado: respuesta
+				})		
+			}
 		})
 	})
 
@@ -234,7 +236,7 @@ app.post('/registromatricula',(req,res)=>{
 var sw=false;
 let documento=req.body.documento;
 
-	Aspirante.findOne({identificador: documento},(err,respuesta)=>{
+	Usuario.findOne({identificador: documento},(err,respuesta)=>{
 		if(err){
 			return console.log(err)
 		}
@@ -299,7 +301,7 @@ app.post('/eliminacionmatricula',(req,res)=>{
 			return console.log(err)
 		}
 		Matricula.find({idcurso: req.body.identificadorcurso},(err,respuesta)=>{
-			Aspirante.find({}).exec((err,respuestaa)=>{
+			Usuario.find({}).exec((err,respuestaa)=>{
 		  		Curso.find({}).exec((err,respuestaaa)=>{
 					res.render('eliminacionmatricula',{
 						matricula: resultados,

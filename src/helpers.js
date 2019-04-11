@@ -19,6 +19,11 @@ let texto=`
   <tbody>`;
 if(listado){
 listado.forEach(curso=>{
+      if(curso.intensidad==null){
+        intensidad="";
+      } else{
+        intensidad=curso.intensidad;
+      }
 	texto=texto+
   	`<tr>
   		<td>${curso.identificador}</td>
@@ -26,7 +31,7 @@ listado.forEach(curso=>{
   		<td>${curso.descripcion}</td>
   		<td>${curso.valor}</td>
   		<td>${curso.modalidad}</td>
-  		<td>${curso.intensidad}</td>
+  		<td>${intensidad}</td>
   		<td>${curso.estado}</td>
   	</tr>`;
 })
@@ -75,6 +80,7 @@ let out='<option value="">-</option> ';
 
 ///////////////////////////////////////////MOSTRAR LOS CURSOS DISPONIBLES VER MAS2//////////////////////////////////////////////////////////////
 hbs.registerHelper('mostrarcursosdisponiblesvermas2',(listado)=>{
+  let intensidad;
 let string ;
 var out=`<div class="accordion" id="accordionExample">
  <div class="row">`;
@@ -83,7 +89,14 @@ var sw=false;
 i=1;
 	listado.forEach(curso=>{
     if(curso.estado=='Disponible' ){
+      if(curso.intensidad==null){
+        intensidad="";
+      } else{
+        intensidad=curso.intensidad;
+      }
         out = out +
+      
+      
     `
     <div class=".cols-sm-12 .cols-md-4 .cols-lg-12" >
       <div class="card" >
@@ -102,7 +115,7 @@ i=1;
           <div class="card-body">
             Descripcion: ${curso.descripcion}<br>
             Modalidad: ${curso.modalidad}<br>
-            Intensidad: ${curso.intensidad}
+            Intensidad: ${intensidad}
           </div>
         </div>
      </div>
